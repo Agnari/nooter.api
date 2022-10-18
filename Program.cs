@@ -1,6 +1,7 @@
 using Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Nooter.API.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
