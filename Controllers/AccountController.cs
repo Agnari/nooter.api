@@ -38,8 +38,9 @@ namespace AdmissionTool.API.Controllers
             return Ok(new
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                userId = user.Id.ToString(),
-                Expiration = token.ValidTo
+                UserId = user.Id.ToString(),
+                Expiration = token.ValidTo,
+                UserName = user.UserName,
             });
         }
 
