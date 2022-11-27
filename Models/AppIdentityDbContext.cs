@@ -9,5 +9,6 @@ namespace Identity.Models
         public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options) : base(options) { }
 
         public DbSet<Article> Articles { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }
