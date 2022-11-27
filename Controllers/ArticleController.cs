@@ -20,10 +20,16 @@ namespace Nooter.API.Controllers
 
 
         [HttpGet]
-        public IEnumerable<Article> Get()
+        public IActionResult Get()
         {
-
-            return _db.Articles.ToList();
+            var list = _db.Articles.Select(x => new
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Body = x.Body,
+                AuthorName = x.Author.UserName
+            });
+            return Ok(list);
         }
 
         // GET api/<ArticlesController>/5
@@ -36,15 +42,16 @@ namespace Nooter.API.Controllers
 
         // POST api/<ArticlesController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Article model)
+        public async Task<IActionResult> Post([FromBody] ArticleBindingModel model)
         {
             var article = new Article()
             {
-                Id = model.Id,
+                Id = Guid.NewGuid(),
                 Title = model.Title,
                 Body = model.Body,
+                AuthorId = model.AuthorId,
             };
-            _db.Articles.Add(model);
+            _db.Articles.Add(article);
             _db.SaveChanges();
             return Ok();
         }
