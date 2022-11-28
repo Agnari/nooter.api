@@ -34,10 +34,16 @@ namespace Nooter.API.Controllers
 
         // GET api/<ArticlesController>/5
         [HttpGet(template: "{id}")]
-        public Article Get(Guid id)
+        public IActionResult Get(Guid id)
         {
-            var article = _db.Articles.FirstOrDefault(x => x.Id == id);
-            return article;
+            var article = _db.Articles.Select(x => new
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Body = x.Body,
+                AuthorName = x.Author.UserName
+            }).FirstOrDefault(x => x.Id == id);
+            return Ok(article);
         }
 
         // POST api/<ArticlesController>
