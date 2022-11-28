@@ -64,7 +64,7 @@ namespace Nooter.API.Controllers
 
         // PUT api/<ArticlesController>/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(Guid id, [FromBody] Article model)
+        public async Task<IActionResult> Put(Guid id, [FromBody] ArticleBindingModel model)
         {
             var article = _db.Articles.FirstOrDefault(x => x.Id == id);
             if (article != null)
