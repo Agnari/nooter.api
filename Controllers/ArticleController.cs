@@ -27,6 +27,7 @@ namespace Nooter.API.Controllers
                 Id = x.Id,
                 Title = x.Title,
                 Body = x.Body,
+                ImageURL = x.ImageURL,
                 AuthorName = x.Author.UserName
             });
             return Ok(list);
@@ -41,6 +42,7 @@ namespace Nooter.API.Controllers
                 Id = x.Id,
                 Title = x.Title,
                 Body = x.Body,
+                ImageURL = x.ImageURL,
                 AuthorName = x.Author.UserName
             }).FirstOrDefault(x => x.Id == id);
             return Ok(article);
@@ -55,6 +57,7 @@ namespace Nooter.API.Controllers
                 Id = Guid.NewGuid(),
                 Title = model.Title,
                 Body = model.Body,
+                ImageURL = model.ImageURL,
                 AuthorId = model.AuthorId,
             };
             _db.Articles.Add(article);
@@ -72,6 +75,7 @@ namespace Nooter.API.Controllers
                 article.Id = id;
                 article.Title = model.Title;
                 article.Body = model.Body;
+                article.ImageURL = model.ImageURL;
                 _db.SaveChanges();
             }
             return Ok();
