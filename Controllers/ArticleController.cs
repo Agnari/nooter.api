@@ -65,6 +65,21 @@ namespace Nooter.API.Controllers
             return Ok();
         }
 
+        [HttpGet(template: "{id}/UsersAllArticles")]
+        public IActionResult GetAuthorArticles(Guid id)
+        {
+            var article = _db.Articles.Select(x => new
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Body = x.Body,
+                ImageURL = x.ImageURL,
+                AuthorName = x.Author.UserName,
+                AuthorId = x.AuthorId
+            }).Where(x => x.AuthorId == id.ToString());
+            return Ok(article);
+        }
+
         // PUT api/<ArticlesController>/5
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(Guid id, [FromBody] ArticleBindingModel model)
