@@ -1,7 +1,9 @@
 using Identity.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Nooter.API.Models;
+using System.Security.Claims;
 
 namespace Nooter.API.Controllers
 {
@@ -50,19 +52,22 @@ namespace Nooter.API.Controllers
 
         // POST api/<ArticlesController>
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post([FromBody] ArticleBindingModel model)
         {
+            var userIdClaim = this.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier);
+
             var article = new Article()
             {
                 Id = Guid.NewGuid(),
                 Title = model.Title,
                 Body = model.Body,
                 ImageURL = model.ImageURL,
-                AuthorId = model.AuthorId,
+                AuthorId = userIdClaim.Value,
             };
             _db.Articles.Add(article);
-            _db.SaveChanges();
-            return Ok();
+            await _db.SaveChangesAsync();
+            return Ok(article);
         }
 
         [HttpGet(template: "{id}/UsersAllArticles")]
