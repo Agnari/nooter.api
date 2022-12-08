@@ -10,5 +10,7 @@ namespace Nooter.API.Models
         public string Text { get; set; }
         public Guid ArticleId { get; set; }
         public virtual Article Article { get; set; }
+        public string CommenterId { get; set; }
+        public virtual AppUser Commenter { get; set; }
     }
 }
