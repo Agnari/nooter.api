@@ -2,6 +2,7 @@ using Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Nooter.API.Models;
+using System.Security.Claims;
 
 namespace Nooter.API.Controllers
 {
@@ -34,12 +35,14 @@ namespace Nooter.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CommentBindingModel model)
         {
+            var userIdClaim = this.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier);
+
             var comment = new Comment()
             {
                 Id = Guid.NewGuid(),
                 Text = model.Text,
                 ArticleId = model.ArticleId,
-                CommenterId = model.CommenterId,
+                CommenterId = userIdClaim.Value,
             };
             _db.Comments.Add(comment);
             _db.SaveChanges();
