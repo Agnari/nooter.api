@@ -18,10 +18,16 @@ namespace Nooter.API.Controllers
         }
 
         [HttpGet(template: "{id}")]
-        public IEnumerable<Comment> Get(Guid id)
+        public IActionResult Get(Guid id)
         {
-            var comments = _db.Comments.Where(x => x.ArticleId == id);
-            return comments;
+            var comment = _db.Comments.Select(x => new
+            {
+                Id = x.Id,
+                Text = x.Text,
+                ArticleId = x.ArticleId,
+                CommenterName = x.Commenter.UserName
+            }).Where(x => x.ArticleId == id);
+            return Ok(comment);
         }
 
         // POST api/<CommentController>
@@ -32,7 +38,8 @@ namespace Nooter.API.Controllers
             {
                 Id = Guid.NewGuid(),
                 Text = model.Text,
-                ArticleId = model.ArticleId
+                ArticleId = model.ArticleId,
+                CommenterId = model.CommenterId,
             };
             _db.Comments.Add(comment);
             _db.SaveChanges();
