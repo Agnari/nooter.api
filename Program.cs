@@ -7,9 +7,9 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add DbContext with PostgreSQL (update your connection string in Render/Supabase environment variable)
+// Add DbContext with PostgreSQL
 builder.Services.AddDbContext<AppIdentityDbContext>(options =>
-    options.UseNpgsql(builder.Configuration["ConnectionStrings:DefaultConnection"]));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add Identity
 builder.Services.AddIdentity<AppUser, IdentityRole>()
@@ -25,7 +25,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddJwtBearer(options =>
 {
-    options.TokenValidationParameters = new TokenValidationParameters()
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = false,
         ValidateAudience = false,
@@ -54,12 +54,11 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
-// --- Automatic EF Core migrations ---
+// Automatic EF Core migrations
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppIdentityDbContext>();
     db.Database.Migrate();
 }
 
-// Run the app
 app.Run();
