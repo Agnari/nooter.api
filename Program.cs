@@ -40,6 +40,14 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+// --- AUTOMATIC MIGRATION START ---
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppIdentityDbContext>();
+    db.Database.Migrate(); // applies pending migrations automatically
+}
+// --- AUTOMATIC MIGRATION END ---
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
